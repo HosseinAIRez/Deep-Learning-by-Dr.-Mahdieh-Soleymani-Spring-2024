@@ -12,7 +12,7 @@ In this section, we transition from theory to implementation. Our core goals are
 ## 🍕 All the Slices
 *  **1-Basics:** in the first part, we explain all the basic concepts of tensor's, pytorch commends, and necessary operations
 *  **2-NN_Scratch:** we continue with the forward and backward passes in a Neural Net, and then a real-world problem
-*  **2-Optimization:** in this part, we will learn some of the most widely used and state of the art optimization algorithms and their effect on the learning path on different functions
+*  **3-Optimization:** in this part, we will learn some of the most widely used and state of the art optimization algorithms and their effect on the learning path on different functions
 
 ## 📂 Contents
 This folder contains the materials and practical exercises for the Basic module:
