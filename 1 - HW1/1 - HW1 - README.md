@@ -13,6 +13,12 @@ In this section, we transition from theory to implementation. Our core goals are
 *  **1-Basics:** in the first part, we explain all the basic concepts of tensor's, pytorch commends, and necessary operations
 *  **2-NN_Scratch:** we continue with the forward and backward passes in a Neural Net, and then a real-world problem
 *  **3-Optimization:** in this part, we will learn some of the most widely used and state of the art optimization algorithms and their effect on the learning path on different functions
+*  **4-Lazy_Gradient:** In this section, we will learn some of the most commonly used techniques for training deep neural networks, including checkpointing and pooling. I have collected some practical notes that really helped me solve the puzzle that the author intentionally posed to make us think. Read it, maybe you (just like me!) will find it useful.
+   <p align="center">
+      <img src="4-Lazy_Gradient_could you guess what.png" alt="Lazy Gradient Visualization" width="600">
+      <br>
+      <em>Figure 1: how to set the create_dataloader function in accumulation method</em>
+    </p>
 
 ## 📂 Contents
 This folder contains the materials and practical exercises for the Basic module:
