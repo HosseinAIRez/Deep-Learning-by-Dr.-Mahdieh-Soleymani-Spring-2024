@@ -32,4 +32,4 @@ This folder contains the materials and practical exercises for the Basic module:
 ## 🛠 Prerequisites
 Before running the notebooks, ensure you have the necessary dependencies installed:
 ```python
-pip install torch torchvision matplotlib sklearn numpy
+pip install torch torchvision matplotlib sklearn numpy plotly
