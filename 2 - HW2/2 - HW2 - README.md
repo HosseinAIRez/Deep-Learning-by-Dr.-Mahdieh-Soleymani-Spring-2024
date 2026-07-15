@@ -32,6 +32,17 @@ Before starting the practical exercises, it is worth mentioning that all trained
       <em>Figure 2: cifar 100 dataset</em>
     </p>
 
+* **2-Segmentation**  In this section, I used the [`CamVid`](https://www.kaggle.com/datasets/carlolepelaars/camvid) dataset from Kaggle,
+  since the dataset referenced by the authors was originally hosted on Google Drive and is no longer available.  
+  CamVid is one of the closest alternatives to the dataset used in the original project, and its full description can be found at the link above.
+
+  <p align="center">
+    <img src="camvid.png" alt="CamVid dataset" width="600">
+    <br>
+    <em>Figure 3: CamVid dataset</em>
+  </p>
+
+
 ## 📂 Contents
 The `Results` directory contains the following files:
 
@@ -40,6 +51,7 @@ The `Results` directory contains the following files:
   approximately 90% accuracy on the test set
   * `cifar100_Q1_checkpoint.pth`: The same pretrained feature extractor with only the final classification 
   layer retrained on CIFAR-100 dataset with approximately 40% accuracy on the test set.
+  * `CamVid_unet_Q2_checkpoint.pth`: the final U-Net checkpoint trained for the `Segmentation` notebook.
 * `Dataframes`:
   * `cifar10_Q1_Classification_test_df.xlsx`& `cifar10_Q1_Classification_train_df.xlsx`
    &  `cifar10_Q1_Classification_valid_df.xlsx` the results of training and evaluation model on 
