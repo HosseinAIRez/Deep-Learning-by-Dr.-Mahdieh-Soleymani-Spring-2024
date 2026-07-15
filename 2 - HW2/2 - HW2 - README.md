@@ -67,5 +67,5 @@ The `Results` directory contains the following files:
 Install the required packages before running the notebooks:
 
 ```bash
-pip install torch torchvision matplotlib scikit-learn numpy pandas
+pip install torch torchvision matplotlib scikit-learn numpy pandas imageio kagglehub ipywidgets
 ```
