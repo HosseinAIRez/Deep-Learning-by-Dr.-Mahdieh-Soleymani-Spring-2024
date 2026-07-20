@@ -115,8 +115,8 @@ Before starting the practical exercises, it is worth mentioning that all trained
 
   These pretrained weights allow the notebook to reproduce the complete inference pipeline without retraining the models from scratch.
 
-      <p align="center">
-    <img src="End to End prediction.png" alt="an example of YOLO prediction of the validation set" width="600">
+  <p align="center">
+  <img src="End to End prediction.png" alt="an example of YOLO prediction of the validation set" width="600">
     <br>
     <em>Figure 5: an example of YOLO prediction of the validation set/ input to the OCR</em>
   </p>
