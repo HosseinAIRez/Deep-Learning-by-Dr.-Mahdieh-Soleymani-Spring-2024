@@ -133,6 +133,7 @@ The `Results` directory contains the following files:
   * `cifar100_Q1_checkpoint.pth`: The same pretrained feature extractor with only the final classification 
   layer retrained on CIFAR-100 dataset with approximately 40% accuracy on the test set.
   * `CamVid_unet_Q2_checkpoint.pth`: the final U-Net checkpoint trained for the `Segmentation` notebook.
+  * `CamVid_unet_Q2_checkpoint.pth`: the final U-Net checkpoint trained for the `Segmentation` notebook.
 * `Dataframes`:
   * `cifar10_Q1_Classification_test_df.xlsx`& `cifar10_Q1_Classification_train_df.xlsx`
    &  `cifar10_Q1_Classification_valid_df.xlsx` the results of training and evaluation model on 
