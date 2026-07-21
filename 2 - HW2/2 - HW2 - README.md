@@ -118,7 +118,7 @@ Before starting the practical exercises, it is worth mentioning that all trained
   <p align="center">
   <img src="End to End prediction.png" alt="an example of YOLO prediction of the validation set" width="600">
     <br>
-    <em>Figure 5: an example of YOLO prediction of the validation set/ input to the OCR</em>
+    <em>Figure 5: Two examples of YOLO prediction of the validation set/ input to the OCR</em>
   </p>
 
 ## 📂 Contents
