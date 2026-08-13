@@ -54,6 +54,86 @@ Model performance is evaluated using several regression metrics, including:
 - MAPE
 - R² Score
 
+## 2. Building a Small Language Model with GPT-2
+
+In this project, we built a small local language model based on **GPT-2 Small (124M parameters)** and trained it on the [`Snappfood Persian Sentiment Analysis`](https://www.kaggle.com/datasets/mohammad1ziyar/cleaned-snappfood-persian-sentiment-analysis) dataset.
+
+The main objective was to build and train a lightweight decoder-only Transformer language model capable of generating **Positive** and **Negative** Persian reviews based on sentiment control tokens.
+
+> **Note:**
+>
+> The original assignment recommended using either [**Llama-3.3-70B-Instruct**](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct) or [**Gemma-2-27B-it**](https://huggingface.co/google/gemma-2-27b-it).
+>
+> Access to the Llama repository was denied due to its gated access policy. Although access to **Gemma-2-27B-it** was granted, its computational requirements were far beyond the available local hardware.
+>
+> Initially, a smaller Gemma model was also considered. However, experiments showed that even with a limited GPU, training a larger language model was impractical in terms of memory consumption and training time.
+>
+> Therefore, to ensure reproducibility and allow the complete training pipeline to run on consumer-grade hardware, the project was migrated to **GPT-2 Small (124M parameters)**.
+>
+> GPT-2 provides a lightweight decoder-only Transformer architecture that is well suited for educational experimentation and language-modeling tasks. This modification affects only the backbone language model and does not change the overall training pipeline or the learning objectives.
+
+### The workflow includes:
+
+- Downloading and preprocessing the `Snappfood` labeled dataset
+- Splitting the dataset into training, validation, and test sets
+- Preparing the GPT-2 tokenizer and adding sentiment control tokens
+- Building a lightweight GPT-2 configuration with custom architectural parameters
+- Implementing the Transformer architecture and attention mechanism
+- Defining the multi-head self-attention process manually
+- Training the model using causal language modeling
+- Evaluating the model on the validation set during training
+- Saving the trained model weights and tokenizer
+- Generating sentiment-controlled text using `<POS>` and `<NEG>` control tokens
+
+### GPT-2 Architecture
+
+The overall architecture used in this project follows the decoder-only Transformer structure:
+
+```text
+                    Input IDs
+                        │
+                        ▼
+               Word Embedding (wte)
+                        │
+                        │
+Position IDs ─────► Position Embedding (wpe)
+                        │
+                        ▼
+                 Sum Embeddings
+                        │
+                        ▼
+                    Dropout
+                        │
+                        ▼
+        ┌────────────────────────────────┐
+        │         Transformer Block 1    │
+        └────────────────────────────────┘
+                        │
+        ┌────────────────────────────────┐
+        │         Transformer Block 2    │
+        └────────────────────────────────┘
+                        │
+                     ...
+                        │
+        ┌────────────────────────────────┐
+        │        Transformer Block N     │
+        └────────────────────────────────┘
+                        │
+                        ▼
+                 Final LayerNorm
+                        │
+                        ▼
+                  LM Head (Linear)
+                        │
+                        ▼
+                  Vocabulary Logits
+                        │
+                        ▼
+              Sampling / Decoding
+                        │
+                        ▼
+                  Next Token
+```
 The trained models, generated tensors, processed datasets, and prediction visualizations are stored in the `Results` directory.
 
 # 📂 Repository Contents
@@ -96,6 +176,36 @@ The `Results` directory contains the following artifacts generated throughout th
 - `Histogram of Close.png` — Distribution of the normalized **Close** price values.
 ---
 
+## `Q2_GPT2.ipynb`
+
+### 🤖 Trained Model & Tokenizer
+
+- `model_weights.pt` - weights of the best-performing locally trained GPT-2 model, selected based on validation loss.
+- `tokenizer_config.json` - tokenizer configuration used for tokenization and sentiment control tokens.
+
+---
+
+### 📈 Generated Texts
+
+- `ten_generated_examples.xlsx` - 10 generated examples containing both positive and negative sentiment-controlled reviews produced by the local GPT-2 model.
+
+---
+
+### 📉 Data Visualization & Training Graphs
+
+- `Data_visualization-1.jpg` - visualization of labeled comments and their character lengths in the training and validation datasets.
+
+  <p align="center">
+    <img src="Data_visualization-1.jpg" alt="Labeled Snappfood comments and their character lengths" width="600">
+    <br>
+    <em>Examples of labeled comments from the Snappfood dataset</em>
+  </p>
+
+- `training_loss_graphs.png` - training and validation loss curves across the 3 training epochs. The relatively long and oscillating curves reflect the computational limitations and the limited training budget used for this experiment.
+---
+
+
+
 # 🌳 Project Structure
 
 ```text
@@ -108,6 +218,7 @@ The `Results` directory contains the following artifacts generated throughout th
 │   │   └── Tensors/
 │   │
 │   └── Q1_RNN.ipynb
+│   └── Q2_GPT2.ipynb
 │
 └── Theoretical/
 ```
@@ -119,5 +230,5 @@ The `Results` directory contains the following artifacts generated throughout th
 Install the required dependencies before running the notebooks:
 
 ```bash
-pip install pmdarima yfinance
+pip install pmdarima yfinance accelerate transformers
 ```

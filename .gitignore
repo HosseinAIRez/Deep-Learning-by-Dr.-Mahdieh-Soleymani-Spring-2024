@@ -20,9 +20,15 @@ runs/
 validation_plate_crops/
 DL_HW3 Pictures
 DL_HW3 - with Answers.docx
-Q2_GPT2.ipynb
 Q3_PEFT.ipynb
 Q4_Reasoning.ipynb
 QR Code.jpeg
 DL_HW3.pdf
-*.xlsx
+Models/
+3 - HW3/Practical/Results/Q2_GPT2/best_gpt2_sentiment.pt
+3 - HW3/Practical/Results/Q1_RNN/val_data.xlsx
+3 - HW3/Practical/Results/Q1_RNN/train_data.xlsx
+3 - HW3/Practical/Results/Q1_RNN/test_data.xlsx
+3 - HW3/Practical/Results/Q1_RNN/full_data_filled.xlsx
+3 - HW3/3 - HW3 - README.md
+3 - HW3/Practical/Results/Q2_GPT2/GPT-2-Finetuned/tokenizer.json
