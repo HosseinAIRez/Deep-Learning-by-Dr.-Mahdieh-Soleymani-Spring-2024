@@ -196,7 +196,7 @@ The `Results` directory contains the following artifacts generated throughout th
 - `Data_visualization-1.jpg` - visualization of labeled comments and their character lengths in the training and validation datasets.
 
   <p align="center">
-    <img src=<img src="Practical/Results/Q2_GPT2/Data_visualization-1.jpg" alt="Labeled Snappfood comments and their character lengths" width="600">
+    <img src="Data_visualization-1.jpg" alt="Labeled Snappfood comments and their character lengths" width="600">
     <br>
     <em>Examples of labeled comments from the Snappfood dataset</em>
   </p>
