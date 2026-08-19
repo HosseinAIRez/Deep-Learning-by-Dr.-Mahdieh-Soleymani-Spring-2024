@@ -136,6 +136,65 @@ Position IDs ─────► Position Embedding (wpe)
 ```
 The trained models, generated tensors, processed datasets, and prediction visualizations are stored in the `Results` directory.
 
+## 3. Optimizing Training with PEFT Methods
+
+In this project, I used the `openai-community/gpt2-medium` model in a Google Colab environment to compare different fine-tuning strategies.
+
+The goal was to evaluate the differences between:
+- **Zerp-shot Learning**
+- **Full Fine-Tuning**
+- **Prefix Tuning**
+- **LoRA (Low-Rank Adaptation)**
+
+All methods were tested on the `Salesforce/wikitext` dataset using the `wikitext-2-v1` configuration.
+
+The comparison focuses on how parameter-efficient fine-tuning methods can reduce the number of trainable parameters and computational requirements while maintaining competitive performance compared to full fine-tuning.
+
+> **Note:** All experiments were conducted on a **Tesla T4 GPU** in Google Colab. Therefore, training time and execution speed may vary depending on your hardware and runtime environment.
+
+in the end the table of all criterias and the meterics are here:
+
+### Comparison of Fine-Tuning Methods
+
+The table below summarizes the main evaluation criteria and performance metrics for all tested approaches.
+
+| Method | Training Time (s) | Training Memory (GB) | Validation Loss | Trainable Parameters (M) |
+|:--|--:|--:|--:|--:|
+| Zero-Shot | N/A | N/A | 8.4760 | N/A |
+| Full Fine-Tuning | 117.5038 | 5.0520 | 1.0679 | 354.823 |
+| Prefix Tuning | 74.7539 | 1.6463 | 9.4951 | 0.983 |
+| LoRA (rank = 4) | 79.9910 | 1.9126 | 7.4146 | 1.0813 |
+| LoRA (rank = 16) | 80.2370 | 1.9399 | 4.6750 | 4.3254 |
+| LoRA (rank = 64) | 82.5561 | 2.0594 | 1.3462 | 17.3015 |
+| LoRA (rank = 256) | 94.9293 | 2.4495 | 1.2216 | 69.2060 |
+
+---
+### Key Observations
+
+- **Full Fine-Tuning** achieved the lowest validation loss, but required the highest training time, memory usage, and number of trainable parameters.
+- **Prefix Tuning** was the most parameter-efficient approach, although it resulted in the highest validation loss among the fine-tuning methods.
+- Increasing the **LoRA rank** consistently improved validation performance, at the cost of higher memory usage and more trainable parameters.
+- **LoRA with rank = 256** achieved a validation loss close to full fine-tuning while using substantially fewer trainable parameters.
+
+## 4. DeepSeek Reasoning
+
+In this project, I used **Google Colab Pro** to access an **NVIDIA A100 GPU** and experiment with the `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B` model.
+
+After several rounds of setup, testing, and troubleshooting, I downloaded the model to persistent storage so I could reuse it across Colab sessions without repeatedly downloading it again — especially considering the cost and inconvenience of relying on a VPN for large downloads these days 😩.
+
+Using this setup, I evaluated several reasoning and inference strategies on the **MATH-500** dataset, including:
+
+- **Chain-of-Thought (CoT) reasoning**
+- **Best-of-N sampling**
+- **Beam Search over reasoning steps**
+- **Self-Refinement**
+
+For each method, I measured and compared the model's performance on mathematical reasoning tasks. As one example of the evaluation outputs, the results of the Chain-of-Thought experiment are stored in:
+
+`evaluation_results_math500_deepseek_cot.json`
+
+> **Note:** These evaluations were performed on a limited subset of the MATH-500 dataset and under constrained inference settings. Therefore, the reported results should be considered experimental rather than a definitive measure of the model's full capabilities. Performance may improve with larger evaluation sets, longer generation limits, better prompting strategies, and further tuning of the inference pipeline.
+
 # 📂 Repository Contents
 
 The `Results` directory contains the following artifacts generated throughout the project.
@@ -203,7 +262,10 @@ The `Results` directory contains the following artifacts generated throughout th
 
 - `training_loss_graphs.png` - training and validation loss curves across the 3 training epochs. The relatively long and oscillating curves reflect the computational limitations and the limited training budget used for this experiment.
 ---
+## `Q4_Reasoning`:
 
+### 📈 Prediction Results
+- `evaluation_results_math500_deepseek_cot.json` - the results of the Chain-of-Thought experiment are stored in
 
 
 # 🌳 Project Structure
@@ -219,6 +281,8 @@ The `Results` directory contains the following artifacts generated throughout th
 │   │
 │   └── Q1_RNN.ipynb
 │   └── Q2_GPT2.ipynb
+│   └── Q3_PEFT.ipynb
+│   └── Q4_Reasoning.ipynb
 │
 └── Theoretical/
 ```
@@ -230,5 +294,5 @@ The `Results` directory contains the following artifacts generated throughout th
 Install the required dependencies before running the notebooks:
 
 ```bash
-pip install pmdarima yfinance accelerate transformers
+pip install pmdarima yfinance accelerate transformers datasets peft torchao>0.16.0 vllm 
 ```
