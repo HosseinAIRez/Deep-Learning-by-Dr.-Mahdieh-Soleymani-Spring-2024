@@ -56,38 +56,61 @@ Model performance is evaluated using several regression metrics, including:
 
 ## 2. Building a Small Language Model with GPT-2
 
-In this project, we built a small local language model based on **GPT-2 Small (124M parameters)** and trained it on the [`Snappfood Persian Sentiment Analysis`](https://www.kaggle.com/datasets/mohammad1ziyar/cleaned-snappfood-persian-sentiment-analysis) dataset.
+In this project, we built and trained a custom decoder-only Transformer language model inspired by the **GPT-2 architecture** on the [`Snappfood Persian Sentiment Analysis`](https://www.kaggle.com/datasets/mohammad1ziyar/cleaned-snappfood-persian-sentiment-analysis) dataset.
 
-The main objective was to build and train a lightweight decoder-only Transformer language model capable of generating **Positive** and **Negative** Persian reviews based on sentiment control tokens.
+The main objective was to develop a Persian language model capable of generating **Positive** and **Negative** reviews using dedicated sentiment control tokens.
 
-> **Note:**
+Unlike the earlier version of the project, which relied on a much smaller GPT-2 setup due to local hardware limitations, the current implementation is trained using **Google Colab Pro** with access to an **NVIDIA A100 GPU**. This makes it possible to run longer training schedules and experiment with a substantially larger tokenizer vocabulary while still keeping the Transformer architecture lightweight enough for full-parameter optimization.
+
+> **Implementation Note**
 >
-> The original assignment recommended using either [**Llama-3.3-70B-Instruct**](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct) or [**Gemma-2-27B-it**](https://huggingface.co/google/gemma-2-27b-it).
+> The original assignment recommended experimenting with large instruction-tuned language models such as **Llama-3.3-70B-Instruct** or **Gemma-2-27B-it**.
 >
-> Access to the Llama repository was denied due to its gated access policy. Although access to **Gemma-2-27B-it** was granted, its computational requirements were far beyond the available local hardware.
+> Several large pretrained models were initially considered, including Gemma and Qwen variants. However, full fine-tuning of these models with standard optimizers such as **AdamW** required substantially more GPU memory because training must store not only model parameters, but also gradients, optimizer states, and intermediate activations.
 >
-> Initially, a smaller Gemma model was also considered. However, experiments showed that even with a limited GPU, training a larger language model was impractical in terms of memory consumption and training time.
+> Rather than switching to parameter-efficient techniques such as LoRA or QLoRA, this implementation preserves the educational objective of training the complete model with a standard optimization pipeline.
 >
-> Therefore, to ensure reproducibility and allow the complete training pipeline to run on consumer-grade hardware, the project was migrated to **GPT-2 Small (124M parameters)**.
+> Therefore, the final implementation uses a **custom GPT-2-style decoder-only Transformer architecture**, while adopting a modern multilingual tokenizer from the Qwen family to provide better token coverage for Persian text.
 >
-> GPT-2 provides a lightweight decoder-only Transformer architecture that is well suited for educational experimentation and language-modeling tasks. This modification affects only the backbone language model and does not change the overall training pipeline or the learning objectives.
+> The tokenizer vocabulary contains approximately **151K tokens**, including the additional sentiment-conditioning tokens:
+>
+> - `<POS>`
+> - `<NEG>`
+>
+> The resulting model uses a compact Transformer configuration with:
+>
+> - Vocabulary size: **151,667**
+> - Maximum sequence length: **128**
+> - Embedding dimension: **192**
+> - Transformer blocks: **3**
+> - Attention heads: **3**
+> - Feed-forward hidden dimension: **768**
+>
+> This configuration provides a practical balance between vocabulary coverage, computational cost, and the ability to perform full training with **AdamW** on a single NVIDIA A100 GPU.
+>
+> Compared with the earlier local implementation, the current setup allows substantially longer training runs, more reliable validation, checkpointing based on validation loss, and improved sentiment-conditioned Persian text generation.
 
 ### The workflow includes:
 
 - Downloading and preprocessing the `Snappfood` labeled dataset
 - Splitting the dataset into training, validation, and test sets
-- Preparing the GPT-2 tokenizer and adding sentiment control tokens
-- Building a lightweight GPT-2 configuration with custom architectural parameters
-- Implementing the Transformer architecture and attention mechanism
-- Defining the multi-head self-attention process manually
-- Training the model using causal language modeling
-- Evaluating the model on the validation set during training
-- Saving the trained model weights and tokenizer
-- Generating sentiment-controlled text using `<POS>` and `<NEG>` control tokens
+- Preparing a multilingual tokenizer and adding `<POS>` and `<NEG>` sentiment control tokens
+- Building a custom GPT-2-style Transformer configuration
+- Implementing the decoder-only Transformer architecture manually
+- Implementing causal multi-head self-attention
+- Implementing the feed-forward network and residual connections
+- Training all model parameters using **AdamW**
+- Using learning-rate warmup and scheduling during training
+- Applying gradient clipping for training stability
+- Evaluating the model on the validation set after each epoch
+- Tracking both step-level and epoch-level training losses
+- Saving the best-performing model according to validation loss
+- Saving the tokenizer together with the trained model weights
+- Generating sentiment-controlled Persian reviews using `<POS>` and `<NEG>` prompts
 
-### GPT-2 Architecture
+### GPT-2-Style Architecture
 
-The overall architecture used in this project follows the decoder-only Transformer structure:
+The overall model follows the decoder-only Transformer structure:
 
 ```text
                     Input IDs
@@ -113,10 +136,8 @@ Position IDs ─────► Position Embedding (wpe)
         │         Transformer Block 2    │
         └────────────────────────────────┘
                         │
-                     ...
-                        │
         ┌────────────────────────────────┐
-        │        Transformer Block N     │
+        │         Transformer Block 3    │
         └────────────────────────────────┘
                         │
                         ▼
@@ -129,12 +150,10 @@ Position IDs ─────► Position Embedding (wpe)
                   Vocabulary Logits
                         │
                         ▼
-              Sampling / Decoding
+                Sampling / Decoding
                         │
                         ▼
-                  Next Token
-```
-The trained models, generated tensors, processed datasets, and prediction visualizations are stored in the `Results` directory.
+                   Next Token
 
 ## 3. Optimizing Training with PEFT Methods
 
