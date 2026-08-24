@@ -40,15 +40,7 @@ We first implement a standard **Autoencoder (AE)** as the deterministic baseline
 The Autoencoder learns to compress an input image into a lower-dimensional latent representation and reconstruct the original image from this representation:
 
 $$
-x
-\rightarrow
-\text{Encoder}
-\rightarrow
-z
-\rightarrow
-\text{Decoder}
-\rightarrow
-\hat{x}
+x \rightarrow \text{Encoder} \rightarrow z \rightarrow \text{Decoder} \rightarrow \hat{x}
 $$
 
 Unlike a VAE, the latent representation $z$ is deterministic and is not explicitly constrained to follow a predefined probability distribution.
@@ -62,24 +54,14 @@ We then extend the standard Autoencoder into a **Variational Autoencoder** by re
 Instead of directly predicting a latent vector $z$, the encoder predicts the parameters of a Gaussian distribution:
 
 $$
-q_\phi(z|x)
-=
-\mathcal{N}
-\left(
-\mu,
-\sigma^2
-\right)
+q_\phi(z|x) = \mathcal{N}\left(\mu,\sigma^2\right)
 $$
 
 The **reparameterization trick** is then used to sample from this distribution while preserving gradient-based optimization:
 
 $$
-z
-=
-\mu
-+
-\sigma \odot \epsilon,
-\qquad
+z = \mu + \sigma \odot \epsilon,
+\quad \text{where} \quad
 \epsilon \sim \mathcal{N}(0,I)
 $$
 
@@ -94,7 +76,7 @@ $$
 and decoded into new Fashion-MNIST-like images.
 
 <p align="center">
-  <img src="10 generated samples.png" alt="10 generated samples by VAE" width="600">
+  <img src="Practical\Results\VAE\10 generated samples.png" alt="10 generated samples by VAE" width="600">
   <br>
   <em>Figure 1: Ten generated samples produced by the VAE.</em>
 </p>
@@ -114,16 +96,7 @@ $$
 The complete VAE objective consists of two components:
 
 $$
-\mathcal{L}_{VAE}
-=
-\mathcal{L}_{reconstruction}
-+
-D_{KL}
-\left(
-q_\phi(z|x)
-\parallel
-p(z)
-\right)
+\mathcal{L}_{VAE} = \mathcal{L}_{reconstruction} + D_{KL}\left(q_\phi(z|x)\parallel p(z)\right)
 $$
 
 The reconstruction term encourages accurate reconstruction of the input, while the KL term regularizes the latent space and creates a smoother and more structured distribution that supports meaningful random sampling.
@@ -141,15 +114,13 @@ This allows us to visually inspect how movement through the latent space changes
 Conceptually:
 
 $$
-z
-=
-[z_1,z_2,\ldots,z_d]
+z=[z_1,z_2,\ldots,z_d]
 $$
 
 By changing selected values such as $z_1$ and $z_2$, we can observe how the decoder responds to different regions of the learned latent space.
 
 <p align="center">
-  <img src="Axis in VAE.png" alt="Traversing latent dimensions in VAE" width="600">
+  <img src="Practical\Results\VAE\Axis in VAE.png" alt="Traversing latent dimensions in VAE" width="600">
   <br>
   <em>Figure 2: Traversing different regions of the VAE latent space.</em>
 </p>
@@ -163,11 +134,7 @@ In this section, we investigate whether the latent representations learned by th
 For every input image, the encoder produces a latent representation:
 
 $$
-x
-\rightarrow
-\text{Encoder}
-\rightarrow
-\mu
+x\rightarrow\text{Encoder}\rightarrow\mu
 $$
 
 These latent vectors are then clustered using **K-Means Clustering** without using the original class labels.
@@ -177,7 +144,7 @@ The discovered clusters are compared with the true `Fashion-MNIST` classes to ex
 Because the latent representation is high-dimensional, dimensionality reduction is used for visualization.
 
 <p align="center">
-  <img src="Clustering.png" alt="Clustering the VAE latent space" width="600">
+  <img src="Practical\Results\VAE\Clustering.png" alt="Clustering the VAE latent space" width="600">
   <br>
   <em>Figure 3: Comparison between true Fashion-MNIST classes and clusters discovered in the VAE latent space.</em>
 </p>
@@ -211,7 +178,7 @@ This experiment demonstrates that the latent features learned by the generative 
 The final model achieved a test accuracy of:
 
 $$
-\boxed{85.61\%}
+\mathbf{85.61\%}
 $$
 
 on the Fashion-MNIST test set.
@@ -225,22 +192,13 @@ In this experiment, we investigate the sensitivity of the VAE to **adversarial p
 A small, intentionally designed perturbation is added to an input image using the **Fast Gradient Sign Method (FGSM)**:
 
 $$
-x_{\text{adv}}
-=
-x
-+
-\epsilon
-\cdot
-\operatorname{sign}
-\left(
-\nabla_x L
-\right)
+x_{\text{adv}} = x + \epsilon \cdot \mathrm{sign}\left(\nabla_x L\right)
 $$
 
 Although the adversarial image may still appear visually similar to the original input, the carefully chosen perturbation can significantly affect the reconstruction produced by the VAE.
 
 <p align="center">
-  <img src="Adversarial Examples in VAE.png" alt="Adversarial example in VAE" width="600">
+  <img src="Practical\Results\VAE\Adversarial Examples in VAE.png" alt="Adversarial example in VAE" width="600">
   <br>
   <em>Figure 4: Original and adversarial inputs together with their corresponding VAE reconstructions.</em>
 </p>
@@ -268,7 +226,7 @@ The experiment tests whether these learned representations can be transferred to
 The resulting model achieved a test accuracy of:
 
 $$
-\boxed{95.41\%}
+\mathbf{95.41\%}
 $$
 
 on the `MNIST` test set.
@@ -292,11 +250,7 @@ The forward diffusion process gradually adds Gaussian noise to the original imag
 Instead of applying the entire noising process step by step during training, a noisy image at an arbitrary timestep can be obtained directly using:
 
 $$
-x_t
-=
-\sqrt{\bar{\alpha}_t}x_0
-+
-\sqrt{1-\bar{\alpha}_t}\epsilon
+x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\epsilon
 $$
 
 where:
@@ -332,15 +286,7 @@ $$
 The training objective is based on the difference between the actual noise and the predicted noise:
 
 $$
-\mathcal{L}
-=
-\mathbb{E}
-\left[
-\|
-\epsilon -
-\epsilon_\theta(x_t,t)
-\|^2
-\right]
+\mathcal{L} = \mathbb{E}\left[\left\|\epsilon-\epsilon_\theta(x_t,t)\right\|^2\right]
 $$
 
 Residual connections are used throughout the network to improve information flow and stabilize training, while attention blocks allow the network to model relationships between different spatial regions of the image.
@@ -356,9 +302,7 @@ The amount of noise contained in an image depends heavily on the current diffusi
 A sinusoidal embedding is used to represent each timestep at multiple frequencies:
 
 $$
-\omega_i
-=
-\text{max\_period}^{-\frac{2i}{d}}
+\omega_i = \mathrm{max\_period}^{-\frac{2i}{d}}
 $$
 
 The resulting timestep representation is passed through the network and injected into the residual blocks.
@@ -423,16 +367,9 @@ During training, the class condition is randomly removed for a fraction of sampl
 During generation, the two predictions are combined using:
 
 $$
-\epsilon_{\text{guided}}
-=
-\epsilon_{\text{uncond}}
-+
-w
-\left(
-\epsilon_{\text{cond}}
--
-\epsilon_{\text{uncond}}
-\right)
+\epsilon_{\text{guided}} =
+\epsilon_{\text{uncond}} +
+w\left(\epsilon_{\text{cond}}-\epsilon_{\text{uncond}}\right)
 $$
 
 where $w$ represents the guidance strength.
@@ -440,7 +377,7 @@ where $w$ represents the guidance strength.
 This enables stronger control over which digit class should be generated without requiring a separate classifier. and here in figure 5 you can see samples of the generated conditional DDPM.
 
 <p align="center">
-  <img src="conditional_ddpm_samples_2.png" alt="Conditional DDPM" width="600">
+  <img src="Practical\Results\DDPM\conditional_ddpm_samples_2.png" alt="Conditional DDPM" width="600">
   <br>
   <em>Figure 5: Ten generated samples produced by the Condtional DDPM, each row for each class.</em>
 </p>
@@ -470,15 +407,11 @@ Overall, this section demonstrated that diffusion models are considerably more c
 The complete process combines:
 
 $$
-\text{Noise Scheduling}
-\rightarrow
-\text{Timestep Embedding}
-\rightarrow
-\text{U-Net Noise Prediction}
-\rightarrow
-\text{Reverse Diffusion}
-\rightarrow
-\text{Generated Samples}
+\begin{aligned}
+\epsilon_{\text{guided}}
+&= \epsilon_{\text{uncond}} \\
+&\quad + w\left(\epsilon_{\text{cond}}-\epsilon_{\text{uncond}}\right)
+\end{aligned}
 $$
 
 Implementing the model from the architectural components upward provided a much clearer understanding of how the theoretical diffusion equations translate into an actual generative system.
