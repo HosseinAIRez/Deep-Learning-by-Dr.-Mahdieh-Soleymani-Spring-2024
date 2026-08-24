@@ -32,7 +32,5 @@ Models/
 3 - HW3/Practical/Results/Q2_GPT2/GPT-2-Finetuned/tokenizer.json
 3 - HW3/Practical/Results/Q3_PEFT/lora_rank_comparison.xlsx
 Source/
-4 - HW4/4 - HW4 - README.md
-4 - HW4/Practical/DDPM.ipynb
-4 - HW4/Practical/VAE.ipynb
 4 - HW4/Theoretical/4 - HW4 - Theoretical.docx
+4 - HW4/Practical/Results/DDPM/conditional_ddpm_samples_1.png
