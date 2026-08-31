@@ -105,7 +105,7 @@ The model successfully detects all four cats and draws appropriate bounding boxe
 
 This example introduces a more challenging situation.
 
-For three of the cats, the model produces accurate bounding boxes. However, for our cat **Catt**, located in the upper-left part of the image, the boundary between the cat and my sister is highly intertwined because of the pose, camera angle, and physical overlap.
+For three of the cats, the model produces accurate bounding boxes. However, for our cat **Catty**, located in the upper-left part of the image, the boundary between the cat and my sister is highly intertwined because of the pose, camera angle, and physical overlap.
 
 As a result, the model struggles to clearly separate their spatial boundaries and produces a larger combined bounding region.
 
